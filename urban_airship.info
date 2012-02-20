@@ -5,5 +5,4 @@ dependencies[] = views
 dependencies[] = views_bulk_operations
 core = "7.x"
 version = "7.x-1.0"
-package = APSU Custom
 files[] = urban_airship.module
