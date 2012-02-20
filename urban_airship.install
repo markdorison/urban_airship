@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function urban_airship_schema() {
+  $schema['urban_airship_push_notification'] = array(
+    'description' => 'Used to capture push notifications sent out via the admin interface',
+    'fields' => array(
+      'id' => array(
+        'description' => 'An id number for the message',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'notification' => array(
+        'description' => 'The body of the notification that was sent',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'Unix timestamp',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function urban_airship_uninstall() {
+  // Unset webform variables.
+  variable_del('urban_airship_url');
+  variable_del('urban_airship_app_key');
+  variable_del('urban_airship_app_master_secret');
+}
