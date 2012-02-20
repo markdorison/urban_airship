@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Used to add in a table to keep track of the messages being sent. Also cleans module-generated variables when the module is uninstalled.
+ */
+
+/**
  * Implements hook_schema().
  */
 function urban_airship_schema() {

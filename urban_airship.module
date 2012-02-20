@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file
@@ -37,7 +36,7 @@ function urban_airship_menu() {
 }
 
 /**
- * Implementation of hook_permission()
+ * Implements hook_permission().
  */
 function urban_airship_permission() {
   return array(
@@ -71,7 +70,7 @@ function urban_airship_form($form, &$form_state) {
     // Build the form.
     $form['overview'] = array(
       '#type' => 'markup',
-      '#markup' => t('<p>Use the form below to send a message to all users who have the New Student app on their mobile devices.</p>')
+      '#markup' => t('<p>Use the form below to send a message to all users who have the app installed on their mobile devices.</p>')
     );
     $form['notification'] = array(
       '#type' => 'textarea',
@@ -86,18 +85,9 @@ function urban_airship_form($form, &$form_state) {
     );
   }
   else {
-    drupal_set_message('Configuration variables are not set. Please go to <a href="/admin/config/system/ua">the configuration form</a> and correct this before attempting to send messages.', 'error');
+    drupal_set_message(t('Configuration variables are not set. Please go to <a href="/admin/config/system/ua">the configuration form</a> and correct this before attempting to send messages.'), 'error');
   }
   return $form;
-}
-
-/**
- * Validate handler
- */
-function urban_airship_form_validate($form, &$form_state) {
-  /*if (!empty($form_state['values']['email']) && !valid_email_address($form_state['values']['email'])) {
-    form_set_error('email', t('%value is not a valid email address.', array('%value' => $form_state['values']['email'])));
-  }*/
 }
 
 /**
@@ -122,7 +112,7 @@ function urban_airship_form_submit($form, &$form_state) {
   //exit;
   // Send it using curl!
   $c = curl_init($urban_airship_url);
-  curl_setopt($c, CURLOPT_USERPWD, $urban_airship_app_key.":".$urban_airship_app_master_secret);
+  curl_setopt($c, CURLOPT_USERPWD, $urban_airship_app_key . ":" . $urban_airship_app_master_secret);
   curl_setopt($c, CURLOPT_POST, TRUE);
   curl_setopt($c, CURLOPT_POSTFIELDS, $json_encoded_data);
   curl_setopt($c, CURLOPT_HEADER, FALSE);
@@ -132,7 +122,7 @@ function urban_airship_form_submit($form, &$form_state) {
   // Check if any error occured
   $response = curl_getinfo($c);
   if ($response['http_code'] != 200) {
-    $ua_response = "Got negative response from server, http code: ". $response['http_code'];
+    $ua_response = "Got negative response from server, http code: " . $response['http_code'];
   }
   else {
     $ua_response = "Success.";
@@ -149,10 +139,10 @@ function urban_airship_form_submit($form, &$form_state) {
   watchdog('urban_airship', 'Sent notification with id %id. Response was: %response', array('%id' => $record->id, '%response' => $ua_response));
 
   if (strstr($ua_response, 'Success.')) {
-    drupal_set_message('Successfully sent the notification to the Urban Airship site.');
+    drupal_set_message(t('Successfully sent the notification to the Urban Airship site.'));
   }
   else {
-    drupal_set_message('Sent the notification to the Urban Airship site. The response from them was: ' . $ua_response, 'error');
+    drupal_set_message(t('Sent the notification to the Urban Airship site. The response from them was: %ua_response', array('%ua_response' => $ua_response)), 'error');
   }
   $form_state['redirect'] = 'admin/ua/sent';
 }
@@ -591,7 +581,7 @@ function urban_airship_label($item) {
  */
 function urban_airship_action_info() {
   return array(
-    'urban_airship_item_delete_action' =>array(
+    'urban_airship_item_delete_action' => array(
       'type' => 'entity',
       'label' => t('Delete Urban Airship push notification(s)'),
       'configurable' => FALSE,
