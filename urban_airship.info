@@ -4,4 +4,6 @@ core = 7.x
 dependencies[] = views
 dependencies[] = views_bulk_operations
 
+configure = admin/config/system/ua
+
 files[] = urban_airship.module
