@@ -81,7 +81,7 @@ function urban_airship_form($form, &$form_state) {
     );
     $form['submit'] = array(
       '#type' => 'submit',
-      '#value' => 'Send',
+      '#value' => t('Send'),
     );
   }
   else {
