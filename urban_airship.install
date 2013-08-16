@@ -42,4 +42,6 @@ function urban_airship_uninstall() {
   variable_del('urban_airship_url');
   variable_del('urban_airship_app_key');
   variable_del('urban_airship_app_master_secret');
+  variable_del('urban_airship_default_sound');
+  variable_del('urban_airship_default_badge');
 }

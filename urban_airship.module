@@ -64,6 +64,8 @@ function urban_airship_form($form, &$form_state) {
   $urban_airship_url = variable_get('urban_airship_url');
   $urban_airship_app_key = variable_get('urban_airship_app_key');
   $urban_airship_app_master_secret = variable_get('urban_airship_app_master_secret');
+  $urban_airship_default_sound = variable_get('urban_airship_default_sound');
+  $urban_airship_default_badge = variable_get('urban_airship_default_badge');
 
   // Make sure we have all the vars we need.
   if (!empty($urban_airship_url) && !empty($urban_airship_app_key) && !empty($urban_airship_app_master_secret)) {
@@ -79,9 +81,19 @@ function urban_airship_form($form, &$form_state) {
       '#maxlength' => 157,
       '#maxlength_js' => TRUE,
     );
+    $form['sound'] = array(
+     '#type' => 'checkbox',
+     '#title' => t('Play default sound.'),
+     '#default_value' => $urban_airship_default_sound,
+   );
+   $form['badge'] = array(
+     '#type' => 'checkbox',
+     '#title' => t('Increment app badge.'),
+     '#default_value' => $urban_airship_default_badge,
+   );
     $form['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Send'),
+      '#value' => 'Send',
     );
   }
   else {
@@ -104,7 +116,13 @@ function urban_airship_form_submit($form, &$form_state) {
 
   // Send the message to  UrbanAirships.com using curl and JSON.
   // Build the JSON data.
-  $json_data = array('aps' => array('badge' => 1, 'alert' => $notification));
+  $json_data = array('aps' => array('alert' => $notification));
+  if ($form_state['values']['sound']) {
+    $json_data['aps']['sound'] = 'default';
+  }
+  if ($form_state['values']['badge']) {
+    $json_data['aps']['badge'] = 1;
+  }
   $json_encoded_data = json_encode((object)$json_data); // Note: (object) Forces it to be an object instead of an array. Works for PHP 5.2.
   //echo '<pre>';
   //print_r($json_encoded_data);
@@ -185,6 +203,22 @@ function urban_airship_admin_form($form, &$form_state) {
     '#title' => t('App Master Secret'),
     '#required' => TRUE,
     '#default_value' => variable_get('urban_airship_app_master_secret', ''),
+  );
+  $form['defaults'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Default notification settings'),
+    '#description' => t('These settings represent the default state when sending a push notification. They can be overridden for individual messages.'),
+    '#collapsible' => FALSE,
+  );
+  $form['defaults']['urban_airship_default_sound'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Activate notification sound.'),
+    '#default_value' => variable_get('urban_airship_default_sound', 0),
+  );
+  $form['defaults']['urban_airship_default_badge'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Increment app badge number.'),
+    '#default_value' => variable_get('urban_airship_default_badge', 0),
   );
   $form = system_settings_form($form);
   return $form;
