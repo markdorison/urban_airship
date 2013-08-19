@@ -7,7 +7,7 @@
  */
 
 /**
- * Implements hook_foo().
+ * Implements hook_menu().
  */
 function urban_airship_menu() {
   $items['admin/config/system/ua'] = array(
@@ -85,12 +85,12 @@ function urban_airship_form($form, &$form_state) {
      '#type' => 'checkbox',
      '#title' => t('Play default sound.'),
      '#default_value' => $urban_airship_default_sound,
-   );
-   $form['badge'] = array(
-     '#type' => 'checkbox',
-     '#title' => t('Increment app badge.'),
-     '#default_value' => $urban_airship_default_badge,
-   );
+    );
+    $form['badge'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Increment app badge.'),
+      '#default_value' => $urban_airship_default_badge,
+    );
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Send',
@@ -123,11 +123,9 @@ function urban_airship_form_submit($form, &$form_state) {
   if ($form_state['values']['badge']) {
     $json_data['aps']['badge'] = 1;
   }
-  $json_encoded_data = json_encode((object)$json_data); // Note: (object) Forces it to be an object instead of an array. Works for PHP 5.2.
-  //echo '<pre>';
-  //print_r($json_encoded_data);
-  //echo '</pre>';
-  //exit;
+  // Note: (object) Forces it to be an object instead of an array. Works for PHP 5.2.
+  $json_encoded_data = json_encode((object)$json_data);
+
   // Send it using curl!
   $c = curl_init($urban_airship_url);
   curl_setopt($c, CURLOPT_USERPWD, $urban_airship_app_key . ":" . $urban_airship_app_master_secret);
@@ -176,7 +174,6 @@ function urban_airship_sent() {
  * Admin form.
  */
 function urban_airship_admin_form($form, &$form_state) {
-
   // Wrapper div that goes around the entire form.
   $form['#prefix'] = '<div class="fapi-form">';
   $form['#suffix'] = '</div>';
@@ -225,7 +222,10 @@ function urban_airship_admin_form($form, &$form_state) {
 }
 
 /**
- * Tables are described to Views via hook_views_data(), which returns an array of table information, keyed by the name of the table.
+ * Implement hook_views_data().
+ * 
+ * Tables are described to Views via hook_views_data(), which returns an array
+ * of table information, keyed by the name of the table.
  */
 function urban_airship_views_data() {
   $data = array();
