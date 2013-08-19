@@ -52,10 +52,9 @@ function urban_airship_permission() {
 }
 
 /**
- * Form definition.
+ * Implements hook_form().
  */
 function urban_airship_form($form, &$form_state) {
-
   // Wrapper div that goes around the entire form.
   $form['#prefix'] = '<div class="fapi-form">';
   $form['#suffix'] = '</div>';
@@ -72,7 +71,7 @@ function urban_airship_form($form, &$form_state) {
     // Build the form.
     $form['overview'] = array(
       '#type' => 'markup',
-      '#markup' => t('<p>Use the form below to send a message to all users who have the app installed on their mobile devices.</p>')
+      '#markup' => t('<p>Use the form below to send a message to all users who have the app installed on their mobile devices.</p>'),
     );
     $form['notification'] = array(
       '#type' => 'textarea',
@@ -114,7 +113,7 @@ function urban_airship_form_submit($form, &$form_state) {
   $urban_airship_app_key = variable_get('urban_airship_app_key');
   $urban_airship_app_master_secret = variable_get('urban_airship_app_master_secret');
 
-  // Send the message to  UrbanAirships.com using curl and JSON.
+  // Send the message to UrbanAirship.com using curl and JSON.
   // Build the JSON data.
   $json_data = array('aps' => array('alert' => $notification));
   if ($form_state['values']['sound']) {
